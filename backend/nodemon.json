@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_USER": "TasksUser",
+        "MONGO_PASSWORD": "IMtSTL77fyEJw2Kr",
+        "MONGO_DB": "TasksApp"
+    }
+}
