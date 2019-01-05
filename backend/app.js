@@ -55,12 +55,30 @@ app.use('/graphql', graphQlHttp({
         }
         `),
     rootValue: {
-        // tasks: () => {
-        //     return tasks
-        // },
-        // userTask: () => {
-        //     return userTask
-        // },
+        tasks: () => {
+            return Task.find()
+                .then(tasks => {
+                    return tasks.map(task => {
+                        return {...task._doc, _id: task._doc._id.toString()};
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    throw err;   
+                });
+        },
+        userTasks: () => {
+            return UserTask.find()
+                .then(userTasks => {
+                    return userTasks.map(userTask => {
+                        return {...userTask._doc, _id: userTask.id };
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    throw err;
+                });
+        },
         createTask: (args) => {
             console.log(args)
             const task = new Task({
@@ -70,9 +88,8 @@ app.use('/graphql', graphQlHttp({
                 deadline: new Date(args.taskInput.deadline)
             });
             return task.save()
-                .then(result => {
-                    console.log(result);
-                    return { ...result._doc };
+                .then(task => {
+                    return { ...task._doc, _id: task.id };
                 })
                 .catch(err => {
                     console.log(err);
@@ -80,7 +97,6 @@ app.use('/graphql', graphQlHttp({
                 });
         },
         createUserTask: (args) => {
-            console.log(args.userTaskInput);
             const userTask = new UserTask({
                 taskId: args.userTaskInput.taskId,
                 userId: args.userTaskInput.userId,
@@ -88,9 +104,8 @@ app.use('/graphql', graphQlHttp({
                 changeDate: new Date (args.userTaskInput.changeDate)
             });
             return userTask.save()
-                .then(result => {
-                    console.log(result);
-                    return {...result._doc};
+                .then(userTask => {
+                    return { ...userTask._doc, _id:userTask.id };
                 })
                 .catch(err => {
                     console.log(err);
