@@ -5,6 +5,8 @@ const { buildSchema } = require('graphql');
 const mongoose = require('mongoose');
 const Task = require('./models/tasks');
 const UserTask = require('./models/userTask');
+const User = require('./models/user');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 
@@ -19,12 +21,28 @@ app.use('/graphql', graphQlHttp({
             deadline: String
         }
 
+        type User {
+            _id: ID!
+            email: String!
+            password: String
+            userName: String!
+            firstName: String!
+        }
+
         type UserTask {
             _id: ID!
             taskId: String
             userId: String
             status: String!
             changeDate: String!
+        }
+
+        input UserInput {
+            email: String!
+            password: String!
+            userName: String
+            firstName: String!
+            lastName: String!
         }
 
         input TaskInput {
@@ -43,11 +61,12 @@ app.use('/graphql', graphQlHttp({
         type RootQuery {
             tasks: [Task!]!
             userTasks: [UserTask!]!
-
         }
+
         type RootMutation {
             createTask(taskInput: TaskInput): Task
             createUserTask(userTaskInput: UserTaskInput): UserTask
+            createUser(userInput: UserInput): User
         }
         schema {
             query: RootQuery 
@@ -98,14 +117,42 @@ app.use('/graphql', graphQlHttp({
         },
         createUserTask: (args) => {
             const userTask = new UserTask({
-                taskId: args.userTaskInput.taskId,
-                userId: args.userTaskInput.userId,
+                // taskId: args.userTaskInput.taskId,
+                taskId: '5c31414bc33c2902d0987ade',
+                userId: '5c313f29e28ffa02bc016019',
+                // userId: args.userTaskInput.userId,
                 status: args.userTaskInput.status,
                 changeDate: new Date (args.userTaskInput.changeDate)
             });
             return userTask.save()
                 .then(userTask => {
                     return { ...userTask._doc, _id:userTask.id };
+                })
+                .catch(err => {
+                    console.log(err);
+                    throw err;
+                });
+        },
+        createUser: (args) => {
+            return User.findOne({email: args.userInput.email})
+                .then(user => {
+                    if(user){
+                        throw new Error('User exist')
+                    }
+                    return bcrypt.hash(args.userInput.password, 12);
+                })
+                .then(hashedPassword => {
+                    const user = new User({
+                        email: args.userInput.email,
+                        password: hashedPassword,
+                        userName: args.userInput.userName,
+                        firstName: args.userInput.firstName,
+                        lastName: args.userInput.lastName,
+                    });
+                    return user.save();
+                })
+                .then(user => {
+                    return {...user._doc, _id: user.id, password: null};
                 })
                 .catch(err => {
                     console.log(err);

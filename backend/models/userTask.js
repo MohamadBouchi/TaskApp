@@ -4,12 +4,12 @@ const Schema = mongoose.Schema;
 
 const userTaskSchema = new Schema({
     taskId: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Task'
     },
     userId: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     status: {
         type: String,
