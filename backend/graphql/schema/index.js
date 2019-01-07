@@ -25,6 +25,11 @@ module.exports = buildSchema(`
             changeDate: String!
         }
 
+        type AuthData {
+            userId: ID!
+            token: String!
+            tokenExpiration: Int!
+        }
         input UserInput {
             email: String!
             password: String!
@@ -55,6 +60,7 @@ module.exports = buildSchema(`
             tasks: [Task!]!
             userTasks(userTaskInput: UserTaskInput): [UserTask!]!
             users: [User!]!
+            login(email: String!, password: String!): AuthData!
         }
 
         type RootMutation {

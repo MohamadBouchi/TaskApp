@@ -2,7 +2,10 @@ const UserTask = require('../../models/userTask');
 const { dateToString } = require('../../helpers/date');
 
 module.exports = {
-    userTasks: async (args) => {
+    userTasks: async (args, req) => {
+        if(!req.isAuth) {
+            throw new Error('Unauthenticated');
+        }
         try {
             const userTasks = await UserTask.find({ status: args.userTaskInput.status })
                 .populate('taskId')
@@ -16,7 +19,10 @@ module.exports = {
             throw err;
         }
     },
-    createUserTask: async (args) => {
+    createUserTask: async (args, req) => {
+        if(!req.isAuth) {
+            throw new Error('Unauthenticated');
+        }
         try {
             const userTask = new UserTask({
                 taskId: args.userTaskInput.taskId,
@@ -32,7 +38,10 @@ module.exports = {
             throw err;
         }
     },
-    updateUserTask: (args) => {
+    updateUserTask: (args, req) => {
+        if(!req.isAuth) {
+            throw new Error('Unauthenticated');
+        }
         const updated = UserTask.updateOne({ _id: args.updateUserTask.id }, {
             status: args.updateUserTask.status,
             changeDate: args.updateUserTask.changeDate
