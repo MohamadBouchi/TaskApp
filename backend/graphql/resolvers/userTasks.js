@@ -26,7 +26,7 @@ module.exports = {
         try {
             const userTask = new UserTask({
                 taskId: args.userTaskInput.taskId,
-                userId: args.userTaskInput.userId,
+                userId: args.userTaskInput.userId, // req.userId
                 status: args.userTaskInput.status,
                 changeDate: new Date(args.userTaskInput.changeDate)
             });
