@@ -32,8 +32,8 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PA
         const io = socket(server);
         io.on('connection', (socket) => {
             console.log('client connected');
-            socket.on('updated', () => {
-                io.sockets.emit('updated', null);
+            socket.on('updated', (data) => {
+                io.sockets.emit('updated', data);
             });
         });
     })
