@@ -3,9 +3,9 @@ const { dateToString } = require('../../helpers/date');
 
 module.exports = {
     tasks: async (req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated');
-        }
+        // if(!req.isAuth) {
+        //     throw new Error('Unauthenticated');
+        // }
         try {
             const tasks = await Task.find();
             return tasks.map(task => {
@@ -18,9 +18,9 @@ module.exports = {
         };
     },
     createTask: async (args, req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated');
-        }
+        // if(!req.isAuth) {
+        //     throw new Error('Unauthenticated');
+        // }
         try {
             const task = new Task({
                 title: args.taskInput.title,

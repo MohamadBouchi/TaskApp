@@ -3,16 +3,26 @@ const { dateToString } = require('../../helpers/date');
 
 module.exports = {
     userTasks: async (args, req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated');
-        }
+        // if(!req.isAuth) {
+        //     throw new Error('Unauthenticated');
+        // }
         try {
-            const userTasks = await UserTask.find({ status: args.userTaskInput.status })
-                .populate('taskId')
-                .populate('userId');
-            return userTasks.map(userTask => {
-                return { ...userTask._doc, _id: userTask.id, changeDate: dateToString(userTask._doc.changeDate) };
-            });
+            if (args.userTaskInput.status === "") {
+                const userTasks = await UserTask.find()
+                    .populate('taskId')
+                    .populate('userId');
+                return userTasks.map(userTask => {
+                    return { ...userTask._doc, _id: userTask.id, changeDate: dateToString(userTask._doc.changeDate)};
+                });
+            }
+            else {
+                const userTasks = await UserTask.find({ status: args.userTaskInput.status })
+                    .populate('taskId')
+                    .populate('userId');
+                return userTasks.map(userTask => {
+                    return { ...userTask._doc, _id: userTask.id, changeDate: dateToString(userTask._doc.changeDate) };
+                });
+            }
         }
         catch (err) {
             console.log(err);
@@ -20,9 +30,9 @@ module.exports = {
         }
     },
     createUserTask: async (args, req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated');
-        }
+        // if (!req.isAuth) {
+        //     throw new Error('Unauthenticated');
+        // }
         try {
             const userTask = new UserTask({
                 taskId: args.userTaskInput.taskId,
@@ -39,9 +49,9 @@ module.exports = {
         }
     },
     updateUserTask: (args, req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated');
-        }
+        // if (!req.isAuth) {
+        //     throw new Error('Unauthenticated');
+        // }
         const updated = UserTask.updateOne({ _id: args.updateUserTask.id }, {
             status: args.updateUserTask.status,
             changeDate: args.updateUserTask.changeDate

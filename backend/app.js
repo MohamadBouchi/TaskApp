@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const isAuth = require('./middleware/is-auth');
 const graphQlSchema = require('./graphql/schema/index');
 const graphQlResolvers = require('./graphql/resolvers/index');
+const socket = require('socket.io');
 
 const app = express();
 app.use(bodyParser.json());
@@ -27,7 +28,14 @@ app.use('/graphql', graphQlHttp({
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-autbo.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`, { useNewUrlParser: true })
     .then(() => {
-        app.listen(3000);
+        const server = app.listen(3000);
+        const io = socket(server);
+        io.on('connection', (socket) => {
+            console.log('client connected');
+            socket.on('updated', () => {
+                io.sockets.emit('updated', null);
+            });
+        });
     })
     .catch(err => {
         console.log(err);
