@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
     users: async (req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated');
-        }
+        // if(!req.isAuth) {
+        //     throw new Error('Unauthenticated');
+        // }
         try {
             const users = await User.find();
             return users.map(user => {
@@ -19,9 +19,9 @@ module.exports = {
         }
     },
     createUser: async (args, req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated');
-        }
+        // if(!req.isAuth) {
+        //     throw new Error('Unauthenticated');
+        // }
         try{
             const existingUser = await User.findOne({ email: args.userInput.email });
             if (existingUser) {
@@ -53,6 +53,6 @@ module.exports = {
             throw new Error('Password is incorrect');
         }
         const token = jwt.sign({userId: user.id, email: user.email}, 'secretkey', {expiresIn: '1h'});
-        return {userId: user.id, token: token, tokenExpiration: 1};
+        return {userId: user.id, token: token, tokenExpiration: 1, userName: user.userName};
     }
 }

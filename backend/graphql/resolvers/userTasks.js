@@ -12,15 +12,20 @@ module.exports = {
                     .populate('taskId')
                     .populate('userId');
                 return userTasks.map(userTask => {
-                    return { ...userTask._doc, _id: userTask.id, changeDate: dateToString(userTask._doc.changeDate)};
+                    // console.log(userTask._doc.taskId._doc._id.toString())
+                    return { ...userTask._doc,
+                        _id: userTask.id,
+                        changeDate: dateToString(userTask._doc.changeDate)};
                 });
             }
             else {
                 const userTasks = await UserTask.find({ status: args.userTaskInput.status })
-                    .populate('taskId')
-                    .populate('userId');
+                .populate('taskId')
+                .populate('userId');
                 return userTasks.map(userTask => {
-                    return { ...userTask._doc, _id: userTask.id, changeDate: dateToString(userTask._doc.changeDate) };
+                    return { ...userTask._doc,
+                            _id: userTask.id,
+                            changeDate: dateToString(userTask._doc.changeDate)};
                 });
             }
         }
@@ -54,7 +59,8 @@ module.exports = {
         // }
         const updated = UserTask.updateOne({ _id: args.updateUserTask.id }, {
             status: args.updateUserTask.status,
-            changeDate: args.updateUserTask.changeDate
+            changeDate: args.updateUserTask.changeDate,
+            userId: args.updateUserTask.userId,
         }, function (err, affected, resp) {
             if (affected.nModified === 1)
                 return true;

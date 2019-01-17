@@ -18,6 +18,10 @@ const taskSchema = new Schema({
     deadline: {
         type: Date,
         required: false
+    },
+    assigned: {
+        type: Boolean,
+        required: true
     }
 });
 

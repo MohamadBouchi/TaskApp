@@ -7,6 +7,7 @@ module.exports = buildSchema(`
             description: String
             date: String!
             deadline: String
+            assigned: Boolean
         }
 
         type User {
@@ -29,6 +30,7 @@ module.exports = buildSchema(`
             userId: ID!
             token: String!
             tokenExpiration: Int!
+            userName: String!
         }
         input UserInput {
             email: String!
@@ -43,6 +45,7 @@ module.exports = buildSchema(`
             description: String!
             date: String!
             deadline: String!
+            assigned: Boolean!
         }
 
         input UserTaskInput {
@@ -55,9 +58,10 @@ module.exports = buildSchema(`
             id: String!
             status: String!
             changeDate: String!
+            userId: String!
         }
         type RootQuery {
-            tasks: [Task!]!
+            tasks(assigned : Boolean): [Task!]!
             userTasks(userTaskInput: UserTaskInput): [UserTask!]!
             users: [User!]!
             login(email: String!, password: String!): AuthData!
@@ -67,6 +71,7 @@ module.exports = buildSchema(`
             createTask(taskInput: TaskInput): Task
             createUserTask(userTaskInput: UserTaskInput): UserTask
             updateUserTask(updateUserTask: UpdateUserTask): Boolean
+            updateTask(assigned: Boolean, id: String): Boolean
             createUser(userInput: UserInput): User
         }
         schema {
