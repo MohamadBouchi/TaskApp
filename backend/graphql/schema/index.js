@@ -18,6 +18,15 @@ module.exports = buildSchema(`
             firstName: String!
         }
 
+        type Activity {
+            _id: ID!
+            taskTitle: String!
+            userName: String
+            date: String!
+            status: String!
+            changeDate: String!
+        }
+
         type UserTask {
             _id: ID!
             taskId: Task!
@@ -60,11 +69,21 @@ module.exports = buildSchema(`
             changeDate: String!
             userId: String!
         }
+
+        input CreateActivityInput {
+            userName: String!
+            taskTitle: String!
+            status: String!
+            changeDate: String!
+            date: String!
+        }
+
         type RootQuery {
             tasks(assigned : Boolean): [Task!]!
             userTasks(userTaskInput: UserTaskInput): [UserTask!]!
             users: [User!]!
             login(email: String!, password: String!): AuthData!
+            activity(date: String!): [Activity]
         }
 
         type RootMutation {
@@ -73,6 +92,7 @@ module.exports = buildSchema(`
             updateUserTask(updateUserTask: UpdateUserTask): Boolean
             updateTask(assigned: Boolean, id: String): Boolean
             createUser(userInput: UserInput): User
+            createActivity(createActivityInput: CreateActivityInput): Boolean
         }
         schema {
             query: RootQuery 

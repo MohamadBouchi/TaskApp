@@ -38,7 +38,7 @@ module.exports = {
         }
     },
 
-    updateTask: async (args, req) => {
+    updateTask: (args, req) => {
         // if(!req.isAuth) {
         //     throw new Error('Unauthenticated');
         // }

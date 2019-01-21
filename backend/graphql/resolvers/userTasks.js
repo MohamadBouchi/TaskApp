@@ -53,23 +53,36 @@ module.exports = {
             throw err;
         }
     },
-    updateUserTask: (args, req) => {
+    updateUserTask:  (args, req, resp) => {
         // if (!req.isAuth) {
         //     throw new Error('Unauthenticated');
         // }
-        const updated = UserTask.updateOne({ _id: args.updateUserTask.id }, {
-            status: args.updateUserTask.status,
-            changeDate: args.updateUserTask.changeDate,
-            userId: args.updateUserTask.userId,
-        }, function (err, affected, resp) {
-            if (affected.nModified === 1)
-                return true;
-            else
-                return false;
-        });
-        if (updated)
-            return true;
-        else
-            return false;
+        // const updated = await UserTask.updateOne({ _id: args.updateUserTask.id }, {
+        //     status: args.updateUserTask.status,
+        //     changeDate: args.updateUserTask.changeDate,
+        //     userId: args.updateUserTask.userId,
+        // }, function (err, affected, resp) {
+        //     if (affected.nModified === 1)
+        //         return true;
+        //     else
+        //         return false;
+        // });
+        // if (updated)
+        //     return true;
+        // else
+        //     return false;
+       
+        // UserTask.findOneAndUpdate({ _id: args.updateUserTask.id }, {
+        UserTask.findOneAndUpdate({ _id: args.updateUserTask.id }, {
+                status: args.updateUserTask.status,
+                changeDate: args.updateUserTask.changeDate, userId: args.updateUserTask.userId})
+                .then((res) => {
+                    if(res)
+                        return true;
+                    else return false;
+                }).catch(err => {
+                    console.log(err);
+                    throw new Error('failed');
+                });
     }
 }
