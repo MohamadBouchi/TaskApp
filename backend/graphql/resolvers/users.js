@@ -54,5 +54,19 @@ module.exports = {
         }
         const token = jwt.sign({userId: user.id, email: user.email}, 'secretkey', {expiresIn: '1h'});
         return {userId: user.id, token: token, tokenExpiration: 1, userName: user.userName};
+    },
+
+    updateUserPassword: async (args, req, resp) => {
+        const hashedPassword = await bcrypt.hash(args.updateUserPassword.password, 12);
+        User.findOneAndUpdate({ _id: args.updateUserPassword.id }, {
+                password: hashedPassword})
+                .then((res) => {
+                    if(res)
+                        return true;
+                    else return false;
+                }).catch(err => {
+                    console.log(err);
+                    throw new Error('failed');
+                });
     }
 }

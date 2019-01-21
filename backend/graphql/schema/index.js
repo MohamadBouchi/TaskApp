@@ -69,7 +69,10 @@ module.exports = buildSchema(`
             changeDate: String!
             userId: String!
         }
-
+        input UpdateUserPassword {
+            id: String!
+            password: String!
+        }
         input CreateActivityInput {
             userName: String!
             taskTitle: String!
@@ -90,6 +93,7 @@ module.exports = buildSchema(`
             createTask(taskInput: TaskInput): Task
             createUserTask(userTaskInput: UserTaskInput): UserTask
             updateUserTask(updateUserTask: UpdateUserTask): Boolean
+            updateUserPassword(updateUserPassword: UpdateUserPassword): Boolean
             updateTask(assigned: Boolean, id: String): Boolean
             createUser(userInput: UserInput): User
             createActivity(createActivityInput: CreateActivityInput): Boolean
