@@ -87,6 +87,7 @@ module.exports = buildSchema(`
             users: [User!]!
             login(email: String!, password: String!): AuthData!
             activity(date: String!): [Activity]
+            taskDetail(id: String!): [UserTask!]!
         }
 
         type RootMutation {
