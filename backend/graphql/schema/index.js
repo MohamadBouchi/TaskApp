@@ -41,6 +41,13 @@ module.exports = buildSchema(`
             tokenExpiration: Int!
             userName: String!
         }
+
+        type TaskSql {
+            _id: ID!
+            title: String!
+            sql: String!
+        }
+
         input UserInput {
             email: String!
             password: String!
@@ -88,10 +95,12 @@ module.exports = buildSchema(`
             login(email: String!, password: String!): AuthData!
             activity(date: String!): [Activity]
             taskDetail(id: String!): [UserTask!]!
+            taskSql(id: String!): [TaskSql!]!
         }
 
         type RootMutation {
             createTask(taskInput: TaskInput): Task
+            createTaskSql(sql: String, title: String): TaskSql
             createUserTask(userTaskInput: UserTaskInput): UserTask
             updateUserTask(updateUserTask: UpdateUserTask): Boolean
             updateUserPassword(updateUserPassword: UpdateUserPassword): Boolean
